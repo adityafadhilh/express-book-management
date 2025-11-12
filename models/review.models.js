@@ -14,9 +14,17 @@ const ReviewSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Book',
         required: true
+    },
+    createdAt: {
+        type: Schema.Types.Date,
+        default: Date.now()
+    },
+    editedAt: {
+        type: Schema.Types.Date,
+        default: Date.now()
     }
 });
 
-ReviewSchema.index({user: 1, book: 1}, {unique: true})
+ReviewSchema.index({ user: 1, book: 1 }, { unique: true })
 
 module.exports = mongoose.model('Review', ReviewSchema);

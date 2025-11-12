@@ -54,6 +54,14 @@ const findAll = async (query) => {
             $match: {
                 ...where
             },
+        },
+        {
+            $lookup: {
+                from: 'reviews',
+                localField: 'review',
+                foreignField: '_id',
+                as: 'reviewDatas'
+            }
         }
     ]);
     return res;

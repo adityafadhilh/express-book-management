@@ -35,7 +35,7 @@ const BookSchema = new Schema({
         default: []
     },
     review: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
         ref: 'Review'
     },
     // averageRating: {

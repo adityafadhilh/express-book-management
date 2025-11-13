@@ -24,6 +24,10 @@ const UserSchema = new Schema({
         type: String,
         default: Roles.USER
     },
+    favorites: {
+        type: [Schema.Types.ObjectId],
+        ref: 'Favorite'
+    },
     createdAt: {
         type: Date,
         default: Date.now,

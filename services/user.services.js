@@ -1,6 +1,6 @@
 const db = require('../helpers/db');
 const bcrypt = require('bcryptjs');
-const userModels = require('../models/user.models');
+const mongoose = require('mongoose');
 
 const findAll = async () => {
     const res = await db.User.find();
@@ -29,9 +29,27 @@ const create = async (body) => {
 }
 
 const findById = async (id) => {
-    const res = await db.User.findById(id);
-    if (!res) throw "User not found"
-    return res;
+    try {
+        const res = await db.User.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(`${id}`)
+                }
+            },
+            {
+                $lookup: {
+                    from: 'books',
+                    localField: 'favorites',
+                    foreignField: '_id',
+                    as: 'FavoriteBooks'
+                }
+            }
+        ]);
+        if (!res) throw "User not found"
+        return res;
+    } catch (error) {
+        throw error;
+    }
 }
 
 const findByEmail = async (email) => {

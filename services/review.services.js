@@ -7,7 +7,7 @@ const create = async (body) => {
         });
         const bookId = body.book;
         await db.Book.findByIdAndUpdate(bookId, {
-            $push: { review: res._id}
+            $push: { review: res._id},
         });
         return res;
     } catch (error) {

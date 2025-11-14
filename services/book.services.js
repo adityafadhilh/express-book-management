@@ -1,3 +1,5 @@
+const HttpStatus = require('../config/httpStatus');
+const CustomError = require('../helpers/customError');
 const db = require('../helpers/db');
 
 const findAll = async (query) => {
@@ -11,28 +13,28 @@ const findAll = async (query) => {
     }
 
     if (query.author) {
-          where = {
+        where = {
             ...where,
             author: query.author
         }
     }
 
     if (query.isbn) {
-          where = {
+        where = {
             ...where,
             isbn: query.isbn
         }
     }
 
-     if (query.isbn) {
-          where = {
+    if (query.isbn) {
+        where = {
             ...where,
             isbn: query.isbn
         }
     }
 
     if (query.publisher) {
-          where = {
+        where = {
             ...where,
             publisher: query.publisher
         }
@@ -73,7 +75,7 @@ const create = async (body) => {
             isbn: body.isbn
         });
         if (findOne) {
-            throw "Book already exist";
+            throw new CustomError(HttpStatus.BAD_REQUEST, "Book already exist");
         }
         const res = await db.Book.create({
             ...body
@@ -85,25 +87,29 @@ const create = async (body) => {
 }
 
 const update = async (id, body) => {
-   const res = await db.Book.findByIdAndUpdate(id, {
-    ...body,
-   }, {
-    new: true
-   });
-
-   if (!res) throw "Book not available";
-
-   return res;
+    try {
+        const res = await db.Book.findByIdAndUpdate(id, {
+            ...body,
+        }, {
+            new: true
+        });
+        if (!res) throw new CustomError(HttpStatus.BAD_REQUEST, "Failed to update");
+        return res;
+    } catch (error) {
+        throw error;
+    }
 }
 
 const deleteById = async (id) => {
-   const res = await db.Book.findOneAndDelete({
-    _id: id
-   });
-
-   if (!res) throw "Failed to delete";
-
-   return res;
+    try {
+        const res = await db.Book.findOneAndDelete({
+            _id: id
+        });
+        if (!res) throw new CustomError(HttpStatus.BAD_REQUEST, "Failed to delete");
+        return res;
+    } catch (error) {
+        throw error;
+    }
 }
 
 module.exports = {

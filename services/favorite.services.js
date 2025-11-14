@@ -1,3 +1,5 @@
+const HttpStatus = require('../config/httpStatus');
+const CustomError = require('../helpers/customError');
 const db = require('../helpers/db');
 
 const create = async (userId, bookId) => {
@@ -6,6 +8,8 @@ const create = async (userId, bookId) => {
             userId,
             bookId
         });
+
+        if (!res) throw new CustomError(HttpStatus.BAD_REQUEST, 'Failed to add favorite');
 
         await db.User.findByIdAndUpdate(userId, {
             $push: {

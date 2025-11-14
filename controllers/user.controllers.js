@@ -15,7 +15,7 @@ const getUsers = async (req, res) => {
 };
 
 const getSelf = async (req, res) => {
-    const {_id} = req.user;
+    const { _id } = req.user;
     const user = await userServices.findById(_id);
     if (!user) {
         throw "Users empty";
@@ -25,46 +25,50 @@ const getSelf = async (req, res) => {
     });
 };
 
-const addUser = async (req, res) => {
+const addUser = async (req, res, next) => {
     try {
         console.log('ADD USER');
         const body = req.body;
         const user = await userServices.create(body);
         return res.json(user)
-    } catch (errors) {
-        return res.json({
-            errors
-        });
+    } catch (error) {
+        next(error);
     }
 };
 
-const updateUser = async (req, res) => {
-    const { id } = req.params;
-    const user = await userServices.update(id, req.body);
-    return res.json({
-        data: user
-    });
+const updateUser = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const user = await userServices.update(id, req.body);
+        return res.json({
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
-const updateSelf = async (req, res) => {
-    const {_id} = req.user;
-    const user = await userServices.update(_id, req.body);
-    return res.json({
-        data: user
-    });
+const updateSelf = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        const user = await userServices.update(_id, req.body);
+        return res.json({
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
     try {
         const { id } = req.params;
         await userServices.deleteById(id);
         return res.json({
-             message: "Successfully deleted user"
+            message: "Successfully deleted user"
         });
-    } catch (errors) {
-        return res.json({
-           errors
-        });
+    } catch (error) {
+        next(error);
     }
 }
 

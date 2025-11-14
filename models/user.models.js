@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Roles = require('../helpers/roles');
+const Roles = require('../config/roles');
 
 const UserSchema = new Schema({
     email: {
@@ -28,6 +28,9 @@ const UserSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: 'Favorite'
     },
+    // refreshToken: {
+    //     type: String,
+    // },
     createdAt: {
         type: Date,
         default: Date.now,

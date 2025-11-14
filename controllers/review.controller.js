@@ -1,6 +1,6 @@
 const reviewServices = require('../services/review.services');
 
-const createReview = async (req, res) => {
+const createReview = async (req, res, next) => {
     try {
         if (!req.user) {
             return res.status(404).json({
@@ -14,10 +14,8 @@ const createReview = async (req, res) => {
         }
         const review = await reviewServices.create(body);
         return res.json(review);
-    } catch (errors) {
-        return res.json({
-            errors
-        })
+    } catch (error) {
+        next(error)
     }
 }
 

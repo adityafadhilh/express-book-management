@@ -10,40 +10,40 @@ const getBooks = async (req, res) => {
     });
 };
 
-const addBook = async (req, res) => {
+const addBook = async (req, res, next) => {
     try {
         const body = req.body;
         const book = await bookServices.create(body);
         return res.json({
             data: book
         });
-    } catch (errors) {
-        return res.json({
-            errors
-        });
+    } catch (error) {
+       next(error)
     }
 };
 
-const updateBook = async (req, res) => {
-    const { id } = req.params
-    const body = req.body;
-    const book = await bookServices.update(id, body);
-    return res.json({
-        data: book
-    });
+const updateBook = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const body = req.body;
+        const book = await bookServices.update(id, body);
+        return res.json({
+            data: book
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
-const deleteBook = async (req, res) => {
+const deleteBook = async (req, res, next) => {
     try {
         const { id } = req.params;
         await bookServices.deleteById(id);
         return res.json({
-             message: "Successfully deleted book"
+            message: "Successfully deleted book"
         });
-    } catch (errors) {
-        return res.json({
-           errors
-        });
+    } catch (error) {
+       next(error)
     }
 };
 

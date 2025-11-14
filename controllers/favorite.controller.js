@@ -1,6 +1,6 @@
 const favoriteServices = require('../services/favorite.services');
 
-const addToFavorite = async (req, res) => {
+const addToFavorite = async (req, res, next) => {
     try {
         if (!req.user) {
             throw "User not available"
@@ -11,10 +11,8 @@ const addToFavorite = async (req, res) => {
         return res.json({
             data: result,
         });
-    } catch (err) {
-        res.json({
-            errors: err
-        })
+    } catch (error) {
+        next(error);
     }
 }
 

@@ -1,11 +1,13 @@
 const db = require('../helpers/db');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const CustomError = require('../helpers/customError');
+const HttpStatus = require('../config/httpStatus');
 
 const findAll = async () => {
     const res = await db.User.find();
     return res;
-}
+};
 
 const create = async (body) => {
     try {
@@ -14,7 +16,7 @@ const create = async (body) => {
         });
 
         if (user) {
-            throw "User already exist";
+            throw new CustomError(HttpStatus.BAD_REQUEST, "User already exist");
         }
 
         const res = await db.User.create({
@@ -26,7 +28,7 @@ const create = async (body) => {
     } catch (error) {
         throw error;
     }
-}
+};
 
 const findById = async (id) => {
     try {
@@ -45,41 +47,54 @@ const findById = async (id) => {
                 }
             }
         ]);
-        if (!res) throw "User not found"
+        if (!res) throw new CustomError(HttpStatus.NOT_FOUND, "User not found")
         return res;
     } catch (error) {
         throw error;
     }
-}
+};
 
 const findByEmail = async (email) => {
-    const res = await db.User.findOne({
-        email
-    });
-    return res;
-}
+    try {
+        const res = await db.User.findOne({
+            email
+        });
+        if (!res) throw new CustomError(HttpStatus.NOT_FOUND, "User not found")
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
 
 const update = async (id, body) => {
-    const res = await db.User.findByIdAndUpdate(id, {
-        ...body,
-        updatedAt: Date.now()
-    }, {
-        new: true
-    });
-    if (!res) throw "User not available"
-    return res;
-}
+    try {
+        const res = await db.User.findByIdAndUpdate(id, {
+            ...body,
+            updatedAt: Date.now()
+        }, {
+            new: true
+        });
+        if (!res) throw new CustomError(HttpStatus.BAD_REQUEST, "Failed to update");
+        return res;
+    } catch (error) {
+        throw error
+    }
+};
 
 const deleteById = async (id) => {
-    const findOne = await db.User.findById(id);
-    if (!findOne) {
-        throw "User not found";
+    try {
+        const res = await db.User.findByIdAndDelete(id);
+        if (!res) {
+            throw new CustomError(HttpStatus.BAD_REQUEST, "Failed to delete");
+        }
+        // const res = await db.User.deleteOne({
+        //     _id: id
+        // });
+        return res;
+    } catch (error) {
+        throw error;
     }
-    const res = await db.User.deleteOne({
-        _id: id
-    });
-    return res;
-}
+};
 
 module.exports = {
     findAll,
@@ -88,4 +103,4 @@ module.exports = {
     findById,
     findByEmail,
     deleteById
-}
+};

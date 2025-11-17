@@ -10,7 +10,7 @@ const createReview = async (req, res, next) => {
         }
         const body = {
             ...req.body,
-            user: req.user
+            user: req.user._id
         }
         const review = await reviewServices.create(body);
         return res.json(review);

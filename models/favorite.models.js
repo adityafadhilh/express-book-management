@@ -14,11 +14,11 @@ const FavoriteSchema = new Schema({
     },
     createdAt: {
         type: Schema.Types.Date,
-        default: Date.now()
+        default: Date.now
     },
     updatedAt: {
         type: Schema.Types.Date,
-        default: Date.now()
+        default: Date.now
     }
 });
 

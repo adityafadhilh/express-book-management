@@ -17,13 +17,19 @@ const login = async (req, res, next) => {
             throw new CustomError(HttpStatus.UNAUTHORIZED, "Wrong email or password");
         }
 
-        const token = jwt.sign({ ...findOne }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ 
+            _id: findOne._id,
+            roles: findOne.roles,
+         }, process.env.JWT_SECRET, {
             expiresIn: 1800
         });
 
-        const refreshToken = jwt.sign({ ...findOne}, process.env.JWT_SECRET, {
+        const refreshToken = jwt.sign({ 
+            _id: findOne._id,
+            roles: findOne.roles,
+        }, process.env.JWT_SECRET, {
             expiresIn: "1h"
-        })
+        });
 
         // const addRefreshToken = await userServices.update(findOne._id, {
         //     refreshToken: bcrypt.hashSync(refreshToken, 10)

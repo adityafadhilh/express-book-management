@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://'+ process.env.DATABASE_URL)
+mongoose.connect(process.env.DATABASE_URL)
     .then(() => {
         console.log('Connected DB!');
-    })
+    }).catch(err => console.log(err));
 
 mongoose.Promise = global.Promise;
 

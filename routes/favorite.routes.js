@@ -5,4 +5,6 @@ const checkJwt = require('../middleware/checkJwt');
 
 Router.post('/', checkJwt, favoriteController.addToFavorite);
 
+Router.delete('/:bookId', checkJwt, favoriteController.deleteFromFavorite);
+
 module.exports = Router;

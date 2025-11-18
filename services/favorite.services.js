@@ -22,8 +22,29 @@ const create = async (userId, bookId) => {
     } catch (error) {
         throw error
     }
-}
+};
+
+const deleteByBookId = async (userId, bookId) => {
+    try {
+        const res = await db.Favorite.findOneAndDelete({
+            bookId,
+            userId
+        });
+
+        await db.User.findOneAndUpdate({
+            _id: userId,
+        }, {
+            $pull: {
+                favorites: bookId
+            }
+        });
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
 
 module.exports = {
-    create
-}
+    create,
+    deleteByBookId
+};

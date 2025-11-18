@@ -9,12 +9,15 @@ const checkJwt = (req, res, next) => {
             return res.status(HttpStatus.FORBIDDEN).json({ status: "error", message: 'Missing authorization header' });
         }
         const token = header.startsWith('Bearer ') ? header.slice(7) : header;
+        console.log(token);
         const payload = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(payload);
         req.user = {
-            _id: payload._doc._id || payload._doc.id,
-            roles: payload._doc.roles,
-            email: payload._doc.email
+            _id: payload._id || payload.id,
+            roles: payload.roles,
+            email: payload.email
         }
+        console.log(req.user);
 
         // jwt.verify(req.headers['authorization'], process.env.JWT_SECRET, (err, token) => {
         //     if (err) throw err;

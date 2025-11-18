@@ -19,6 +19,7 @@ const login = async (req, res, next) => {
 
         const token = jwt.sign({ 
             _id: findOne._id,
+            email: findOne.email,
             roles: findOne.roles,
          }, process.env.JWT_SECRET, {
             expiresIn: 1800
@@ -26,6 +27,7 @@ const login = async (req, res, next) => {
 
         const refreshToken = jwt.sign({ 
             _id: findOne._id,
+            email: findOne.email,
             roles: findOne.roles,
         }, process.env.JWT_SECRET, {
             expiresIn: "1h"
